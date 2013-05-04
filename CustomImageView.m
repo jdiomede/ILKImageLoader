@@ -68,15 +68,22 @@
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
     if (connection == nil) {
         self.error = [NSError errorWithDomain:NSOSStatusErrorDomain code:NSURLErrorResourceUnavailable userInfo:nil];
-        [self willChangeValueForKey:@"isFinished"];
-        state = CustomImageDownloadStateFinished;
-        [self didChangeValueForKey:@"isFinised"];
+        [self finished];
     } else {
         NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
         [connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
         [connection start];
         [runLoop run];
     }
+}
+
+- (void)finished
+{
+    [self willChangeValueForKey:@"isFinished"];
+    [self willChangeValueForKey:@"isExecuting"];
+    state = CustomImageDownloadStateFinished;
+    [self didChangeValueForKey:@"isExecuting"];
+    [self didChangeValueForKey:@"isFinished"];
 }
 
 - (BOOL)isConcurrent    { return YES; }
@@ -91,9 +98,7 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     self.error = error;
-    [self willChangeValueForKey:@"isFinished"];
-    state = CustomImageDownloadStateFinished;
-    [self didChangeValueForKey:@"isFinised"];
+    [self finished];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
@@ -104,9 +109,7 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    [self willChangeValueForKey:@"isFinished"];
-    state = CustomImageDownloadStateFinished;
-    [self didChangeValueForKey:@"isFinished"];
+    [self finished];
 }
 
 @end
