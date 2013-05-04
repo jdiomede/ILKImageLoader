@@ -1,0 +1,293 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		66F172531735C6C800C2120B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172521735C6C800C2120B /* UIKit.framework */; };
+		66F172551735C6C800C2120B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172541735C6C800C2120B /* Foundation.framework */; };
+		66F172571735C6C800C2120B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172561735C6C800C2120B /* CoreGraphics.framework */; };
+		66F1725D1735C6C800C2120B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 66F1725B1735C6C800C2120B /* InfoPlist.strings */; };
+		66F1725F1735C6C800C2120B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F1725E1735C6C800C2120B /* main.m */; };
+		66F172631735C6C800C2120B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F172621735C6C800C2120B /* AppDelegate.m */; };
+		66F172651735C6C800C2120B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172641735C6C800C2120B /* Default.png */; };
+		66F172671735C6C800C2120B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172661735C6C800C2120B /* Default@2x.png */; };
+		66F172691735C6C800C2120B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172681735C6C800C2120B /* Default-568h@2x.png */; };
+		66F172711735C73400C2120B /* CustomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F1726F1735C73400C2120B /* CustomImageView.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		66F1724F1735C6C800C2120B /* ILKImageLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ILKImageLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		66F172521735C6C800C2120B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		66F172541735C6C800C2120B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		66F172561735C6C800C2120B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		66F1725A1735C6C800C2120B /* ILKImageLoader-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ILKImageLoader-Info.plist"; sourceTree = "<group>"; };
+		66F1725C1735C6C800C2120B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		66F1725E1735C6C800C2120B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		66F172601735C6C800C2120B /* ILKImageLoader-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ILKImageLoader-Prefix.pch"; sourceTree = "<group>"; };
+		66F172611735C6C800C2120B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		66F172621735C6C800C2120B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		66F172641735C6C800C2120B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		66F172661735C6C800C2120B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		66F172681735C6C800C2120B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		66F1726F1735C73400C2120B /* CustomImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomImageView.m; path = ../CustomImageView.m; sourceTree = "<group>"; };
+		66F172701735C73400C2120B /* CustomImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomImageView.h; path = ../CustomImageView.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		66F1724C1735C6C800C2120B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F172531735C6C800C2120B /* UIKit.framework in Frameworks */,
+				66F172551735C6C800C2120B /* Foundation.framework in Frameworks */,
+				66F172571735C6C800C2120B /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		66F172461735C6C800C2120B = {
+			isa = PBXGroup;
+			children = (
+				66F172581735C6C800C2120B /* ILKImageLoader */,
+				66F172511735C6C800C2120B /* Frameworks */,
+				66F172501735C6C800C2120B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		66F172501735C6C800C2120B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				66F1724F1735C6C800C2120B /* ILKImageLoader.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		66F172511735C6C800C2120B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				66F172521735C6C800C2120B /* UIKit.framework */,
+				66F172541735C6C800C2120B /* Foundation.framework */,
+				66F172561735C6C800C2120B /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		66F172581735C6C800C2120B /* ILKImageLoader */ = {
+			isa = PBXGroup;
+			children = (
+				66F172611735C6C800C2120B /* AppDelegate.h */,
+				66F172621735C6C800C2120B /* AppDelegate.m */,
+				66F172701735C73400C2120B /* CustomImageView.h */,
+				66F1726F1735C73400C2120B /* CustomImageView.m */,
+				66F172591735C6C800C2120B /* Supporting Files */,
+			);
+			path = ILKImageLoader;
+			sourceTree = "<group>";
+		};
+		66F172591735C6C800C2120B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				66F1725A1735C6C800C2120B /* ILKImageLoader-Info.plist */,
+				66F1725B1735C6C800C2120B /* InfoPlist.strings */,
+				66F1725E1735C6C800C2120B /* main.m */,
+				66F172601735C6C800C2120B /* ILKImageLoader-Prefix.pch */,
+				66F172641735C6C800C2120B /* Default.png */,
+				66F172661735C6C800C2120B /* Default@2x.png */,
+				66F172681735C6C800C2120B /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		66F1724E1735C6C800C2120B /* ILKImageLoader */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 66F1726C1735C6C800C2120B /* Build configuration list for PBXNativeTarget "ILKImageLoader" */;
+			buildPhases = (
+				66F1724B1735C6C800C2120B /* Sources */,
+				66F1724C1735C6C800C2120B /* Frameworks */,
+				66F1724D1735C6C800C2120B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ILKImageLoader;
+			productName = ILKImageLoader;
+			productReference = 66F1724F1735C6C800C2120B /* ILKImageLoader.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		66F172471735C6C800C2120B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = "James Diomede";
+			};
+			buildConfigurationList = 66F1724A1735C6C800C2120B /* Build configuration list for PBXProject "ILKImageLoader" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 66F172461735C6C800C2120B;
+			productRefGroup = 66F172501735C6C800C2120B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				66F1724E1735C6C800C2120B /* ILKImageLoader */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		66F1724D1735C6C800C2120B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F1725D1735C6C800C2120B /* InfoPlist.strings in Resources */,
+				66F172651735C6C800C2120B /* Default.png in Resources */,
+				66F172671735C6C800C2120B /* Default@2x.png in Resources */,
+				66F172691735C6C800C2120B /* Default-568h@2x.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		66F1724B1735C6C800C2120B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				66F1725F1735C6C800C2120B /* main.m in Sources */,
+				66F172631735C6C800C2120B /* AppDelegate.m in Sources */,
+				66F172711735C73400C2120B /* CustomImageView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		66F1725B1735C6C800C2120B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				66F1725C1735C6C800C2120B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		66F1726A1735C6C800C2120B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		66F1726B1735C6C800C2120B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		66F1726D1735C6C800C2120B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ILKImageLoader/ILKImageLoader-Prefix.pch";
+				INFOPLIST_FILE = "ILKImageLoader/ILKImageLoader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		66F1726E1735C6C800C2120B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "ILKImageLoader/ILKImageLoader-Prefix.pch";
+				INFOPLIST_FILE = "ILKImageLoader/ILKImageLoader-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		66F1724A1735C6C800C2120B /* Build configuration list for PBXProject "ILKImageLoader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66F1726A1735C6C800C2120B /* Debug */,
+				66F1726B1735C6C800C2120B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		66F1726C1735C6C800C2120B /* Build configuration list for PBXNativeTarget "ILKImageLoader" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66F1726D1735C6C800C2120B /* Debug */,
+				66F1726E1735C6C800C2120B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 66F172471735C6C800C2120B /* Project object */;
+}
