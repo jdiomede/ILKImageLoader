@@ -49,7 +49,7 @@
     self = [super init];
     if (self) {
         self.urlString = urlString;
-        self.error = nil;
+        self.error = NULL;
         self.response = [NSMutableData data];
         state = ILKImageDownloadStateInitialized;
     }
@@ -64,7 +64,7 @@
     NSURL *url = [NSURL URLWithString:self.urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
-    if (connection == nil) {
+    if (connection == NULL) {
         self.error = [NSError errorWithDomain:NSOSStatusErrorDomain code:NSURLErrorResourceUnavailable userInfo:nil];
         [self end];
     } else {
@@ -187,28 +187,38 @@ static NSLock *lockCurrentOperations = NULL;
 - (void)setUrlString:(NSString *)urlString
 {
     [[[self class] lockCurrentOperations] lock];
-    if (_urlString) {
-        NSOperation *operation = [[[self class] currentOperations] valueForKey:_urlString];
-        if (operation) {
-            [[[self class] currentOperations] removeObjectForKey:_urlString];
-            [operation removeObserver:self forKeyPath:@"isFinished"];
-            [operation cancel];
-        }
-        [_urlString autorelease];
-        _urlString = NULL;
-    }
-    _urlString = [urlString copy];
-    if (_urlString) {
-        UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
-        if (cachedImage != NULL) {
-            self.image = cachedImage;
-        } else if ([[[self class] currentOperations] objectForKey:_urlString] == NULL) {
-            ILKImageDownload *downloadOperation = [[[ILKImageDownload alloc] initWithUrlString:_urlString] autorelease];
-            if (downloadOperation != NULL) {
-                [downloadOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
-                [[[self class] currentOperations] setValue:downloadOperation forKey:_urlString];
-                [[[self class] downloadOperationQueue] addOperation:downloadOperation];
+    BOOL queueDownloadOperation = NO;
+    if (![_urlString isEqualToString:urlString]) {
+        if (_urlString != NULL) {
+            NSOperation *operation = [[[self class] currentOperations] valueForKey:_urlString];
+            if (operation != NULL) {
+                [[[self class] currentOperations] removeObjectForKey:_urlString];
+                [operation removeObserver:self forKeyPath:@"isFinished"];
+                [operation cancel];
             }
+            [_urlString autorelease];
+            _urlString = NULL;
+        }
+        _urlString = [urlString copy];
+        if (_urlString != NULL) {
+            UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
+            if (cachedImage != NULL) {
+                self.image = cachedImage;
+            } else if ([[[self class] currentOperations] objectForKey:_urlString] == NULL) {
+                queueDownloadOperation = YES;
+            }
+            
+        }
+    } else if ([[[self class] imageCache] objectForKey:_urlString] == NULL &&
+               [[[self class] currentOperations] objectForKey:_urlString] == NULL) {
+        queueDownloadOperation = YES;
+    }
+    if (queueDownloadOperation) {
+        ILKImageDownload *downloadOperation = [[[ILKImageDownload alloc] initWithUrlString:_urlString] autorelease];
+        if (downloadOperation != NULL) {
+            [downloadOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
+            [[[self class] currentOperations] setValue:downloadOperation forKey:_urlString];
+            [[[self class] downloadOperationQueue] addOperation:downloadOperation];
         }
     }
     [[[self class] lockCurrentOperations] unlock];
@@ -216,14 +226,16 @@ static NSLock *lockCurrentOperations = NULL;
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
-    [[ILKImageView lockCurrentOperations] lock];
+    [[[self class] lockCurrentOperations] lock];
     if ([object isKindOfClass:[ILKImageDownload class]]) {
         ILKImageDownload *downloadOperation = object;
         [[[self class] currentOperations] removeObjectForKey:downloadOperation.urlString];
         [downloadOperation removeObserver:self forKeyPath:@"isFinished"];
-        if (!downloadOperation.error && downloadOperation.response) {
+        if (downloadOperation.error == NULL &&
+            downloadOperation.response != NULL &&
+            [self.urlString isEqualToString:downloadOperation.urlString]) {
             ILKImageDecode *decodeOperation = [[[ILKImageDecode alloc] initWithImageData:downloadOperation.response forUrlString:downloadOperation.urlString] autorelease];
-            if (decodeOperation) {
+            if (decodeOperation != NULL) {
                 [decodeOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
                 [[[self class] currentOperations] setValue:decodeOperation forKey:decodeOperation.urlString];
                 [[[self class] decodeOperationQueue] addOperation:decodeOperation];
@@ -236,10 +248,12 @@ static NSLock *lockCurrentOperations = NULL;
         ILKImageDecode *decodeOperation = object;
         [[[self class] currentOperations] removeObjectForKey:decodeOperation.urlString];
         [decodeOperation removeObserver:self forKeyPath:@"isFinished"];
-        [[[self class] imageCache] setObject:decodeOperation.decodedImage forKey:decodeOperation.urlString];
-        [self didFinishDecodingImage:decodeOperation.decodedImage];
+        if ([self.urlString isEqualToString:decodeOperation.urlString]) {
+            [[[self class] imageCache] setObject:decodeOperation.decodedImage forKey:decodeOperation.urlString];
+            [self didFinishDecodingImage:decodeOperation.decodedImage];
+        }
     }
-    [[ILKImageView lockCurrentOperations] unlock];
+    [[[self class] lockCurrentOperations] unlock];
 }
 
 - (void)didFinishDecodingImage:(UIImage *)decodedImage
