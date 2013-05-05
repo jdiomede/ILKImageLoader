@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "CustomImageView.h"
+#import "ILKImageView.h"
 
 @implementation AppDelegate
 
@@ -24,7 +24,7 @@
     self.viewController = [[[UIViewController alloc] init] autorelease];
     self.viewController.view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)] autorelease];
     [self.viewController.view setBackgroundColor:[UIColor whiteColor]];
-    [self.viewController.view addSubview:[[[CustomImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480) forURLString:@"http://4.bp.blogspot.com/-jxRHIs4mRXs/UD9cXrKBYqI/AAAAAAAAC-Y/wEYwHAV5qIg/s1600/Prince-For-You.jpeg"] autorelease]];
+    [self.viewController.view addSubview:[[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480) forUrlString:@"http://4.bp.blogspot.com/-jxRHIs4mRXs/UD9cXrKBYqI/AAAAAAAAC-Y/wEYwHAV5qIg/s1600/Prince-For-You.jpeg"] autorelease]];
     self.window.rootViewController = self.viewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];

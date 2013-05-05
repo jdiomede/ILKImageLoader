@@ -16,7 +16,7 @@
 		66F172651735C6C800C2120B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172641735C6C800C2120B /* Default.png */; };
 		66F172671735C6C800C2120B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172661735C6C800C2120B /* Default@2x.png */; };
 		66F172691735C6C800C2120B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172681735C6C800C2120B /* Default-568h@2x.png */; };
-		66F172711735C73400C2120B /* CustomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F1726F1735C73400C2120B /* CustomImageView.m */; };
+		66F172711735C73400C2120B /* ILKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F1726F1735C73400C2120B /* ILKImageView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,8 +33,8 @@
 		66F172641735C6C800C2120B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		66F172661735C6C800C2120B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		66F172681735C6C800C2120B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		66F1726F1735C73400C2120B /* CustomImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CustomImageView.m; path = ../CustomImageView.m; sourceTree = "<group>"; };
-		66F172701735C73400C2120B /* CustomImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CustomImageView.h; path = ../CustomImageView.h; sourceTree = "<group>"; };
+		66F1726F1735C73400C2120B /* ILKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ILKImageView.m; path = ../ILKImageView.m; sourceTree = "<group>"; };
+		66F172701735C73400C2120B /* ILKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILKImageView.h; path = ../ILKImageView.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,8 +83,8 @@
 			children = (
 				66F172611735C6C800C2120B /* AppDelegate.h */,
 				66F172621735C6C800C2120B /* AppDelegate.m */,
-				66F172701735C73400C2120B /* CustomImageView.h */,
-				66F1726F1735C73400C2120B /* CustomImageView.m */,
+				66F172701735C73400C2120B /* ILKImageView.h */,
+				66F1726F1735C73400C2120B /* ILKImageView.m */,
 				66F172591735C6C800C2120B /* Supporting Files */,
 			);
 			path = ILKImageLoader;
@@ -171,7 +171,7 @@
 			files = (
 				66F1725F1735C6C800C2120B /* main.m in Sources */,
 				66F172631735C6C800C2120B /* AppDelegate.m in Sources */,
-				66F172711735C73400C2120B /* CustomImageView.m in Sources */,
+				66F172711735C73400C2120B /* ILKImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
