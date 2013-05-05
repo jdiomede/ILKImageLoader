@@ -6,6 +6,12 @@
 //  Copyright (c) 2013 James Diomede. All rights reserved.
 //
 
+/* TODOs:   (1) optimize different operation queues for type
+            (2) convert UIImage to CGImage and associated decode operations
+            (3) handle failure to download and/or decode image with retries
+            (4) expose cancel image download/decode on ILKImageView
+ */
+
 #import "ILKImageView.h"
 
 @implementation ILKImageDecode
@@ -29,6 +35,7 @@
 
 - (void)main
 {
+    NSLog(@"Launch image decode from thread: %@", [NSThread currentThread]);
     self.decodedImage = [UIImage imageWithData:imageData];
 }
 
@@ -61,6 +68,7 @@
     [self willChangeValueForKey:@"isExecuting"];
     state = ILKImageDownloadStateExecuting;
     [self didChangeValueForKey:@"isExecuting"];
+    NSLog(@"Launch image download from thread: %@", [NSThread currentThread]);
     NSURL *url = [NSURL URLWithString:self.urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request delegate:self startImmediately:NO];
@@ -68,7 +76,7 @@
         self.error = [NSError errorWithDomain:NSOSStatusErrorDomain code:NSURLErrorResourceUnavailable userInfo:nil];
         [self end];
     } else {
-        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+        NSRunLoop *runLoop = [NSRunLoop mainRunLoop];
         [connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
         [connection start];
         [runLoop run];
@@ -102,6 +110,7 @@
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
+    NSLog(@"Append image data from thread: %@", [NSThread currentThread]);
     [self.response appendData:data];
 }
 
@@ -259,6 +268,7 @@ static NSLock *lockCurrentOperations = NULL;
 - (void)didFinishDecodingImage:(UIImage *)decodedImage
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        NSLog(@"Load image from main thread: %@", [NSThread currentThread]);
         [self setAlpha:0.0f];
         self.image = decodedImage;
         [UIView animateWithDuration:1.0f animations:^{

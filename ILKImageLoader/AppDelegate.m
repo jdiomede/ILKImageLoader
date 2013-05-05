@@ -26,13 +26,15 @@
 {
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     // Override point for customization after application launch.
-    self.viewController = [[[UIViewController alloc] init] autorelease];
+    self.exampleTableViewController = [[[ExampleTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
+    [self.exampleTableViewController.tableView setFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)];
+    /*self.viewController = [[[UIViewController alloc] init] autorelease];
     self.viewController.view = [[[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height)] autorelease];
     [self.viewController.view setBackgroundColor:[UIColor whiteColor]];
     self.imageView = [[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 480) forUrlString:@"http://4.bp.blogspot.com/-jxRHIs4mRXs/UD9cXrKBYqI/AAAAAAAAC-Y/wEYwHAV5qIg/s1600/Prince-For-You.jpeg"] autorelease];
     [self performSelector:@selector(updateUrlString) withObject:self afterDelay:0.01f];
-    [self.viewController.view addSubview:self.imageView];
-    self.window.rootViewController = self.viewController;
+    [self.viewController.view addSubview:self.imageView];*/
+    self.window.rootViewController = self.exampleTableViewController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;

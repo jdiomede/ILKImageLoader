@@ -17,6 +17,7 @@
 		66F172671735C6C800C2120B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172661735C6C800C2120B /* Default@2x.png */; };
 		66F172691735C6C800C2120B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 66F172681735C6C800C2120B /* Default-568h@2x.png */; };
 		66F172711735C73400C2120B /* ILKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F1726F1735C73400C2120B /* ILKImageView.m */; };
+		66F172741736DE6000C2120B /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F172731736DE6000C2120B /* ExampleTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +36,8 @@
 		66F172681735C6C800C2120B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		66F1726F1735C73400C2120B /* ILKImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ILKImageView.m; path = ../ILKImageView.m; sourceTree = "<group>"; };
 		66F172701735C73400C2120B /* ILKImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ILKImageView.h; path = ../ILKImageView.h; sourceTree = "<group>"; };
+		66F172721736DE5F00C2120B /* ExampleTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleTableViewController.h; sourceTree = "<group>"; };
+		66F172731736DE6000C2120B /* ExampleTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,8 @@
 				66F172621735C6C800C2120B /* AppDelegate.m */,
 				66F172701735C73400C2120B /* ILKImageView.h */,
 				66F1726F1735C73400C2120B /* ILKImageView.m */,
+				66F172721736DE5F00C2120B /* ExampleTableViewController.h */,
+				66F172731736DE6000C2120B /* ExampleTableViewController.m */,
 				66F172591735C6C800C2120B /* Supporting Files */,
 			);
 			path = ILKImageLoader;
@@ -172,6 +177,7 @@
 				66F1725F1735C6C800C2120B /* main.m in Sources */,
 				66F172631735C6C800C2120B /* AppDelegate.m in Sources */,
 				66F172711735C73400C2120B /* ILKImageView.m in Sources */,
+				66F172741736DE6000C2120B /* ExampleTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,6 +292,7 @@
 				66F1726E1735C6C800C2120B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
