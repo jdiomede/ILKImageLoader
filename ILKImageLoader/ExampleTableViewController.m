@@ -44,7 +44,7 @@
         self.error = [NSError errorWithDomain:NSOSStatusErrorDomain code:NSURLErrorResourceUnavailable userInfo:nil];
         [self end];
     } else {
-        NSRunLoop *runLoop = [NSRunLoop mainRunLoop];
+        NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
         [connection scheduleInRunLoop:runLoop forMode:NSRunLoopCommonModes];
         [connection start];
         [runLoop run];

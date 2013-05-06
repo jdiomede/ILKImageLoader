@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ILKImageDecode : NSOperation {
+    NSUInteger observerCount;
     NSData *imageData;
 }
 
@@ -22,11 +23,13 @@
 enum {
     ILKImageDownloadStateInitialized,
     ILKImageDownloadStateExecuting,
+    ILKImageDownloadStateCancelled,
     ILKImageDownloadStateFinished
 };
 typedef NSUInteger ILKImageDownloadState;
 
 @interface ILKImageDownload : NSOperation <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
+    NSUInteger observerCount;
     ILKImageDownloadState state;
 }
 
