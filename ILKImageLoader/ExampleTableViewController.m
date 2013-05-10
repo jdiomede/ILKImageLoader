@@ -12,6 +12,7 @@
 
 - (void)dealloc
 {
+    [_error release];
     [_arrayOfUrls release];
     [responseData release];
     [super dealloc];
@@ -21,6 +22,7 @@
 {
     self = [super init];
     if (self) {
+        _error = NULL;
         responseData = [[NSMutableData alloc] init];
         _arrayOfUrls = [[NSMutableArray alloc] init];
     }
@@ -164,7 +166,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == NULL) {
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        [cell.contentView addSubview:[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 320) forUrlString:[imageUrls objectAtIndex:indexPath.row]]];
+        [cell.contentView addSubview:[[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)] autorelease]];
     }
     
     for (id subview in cell.contentView.subviews) {

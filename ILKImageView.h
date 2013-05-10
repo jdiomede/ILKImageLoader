@@ -8,9 +8,32 @@
 
 #import <UIKit/UIKit.h>
 
+enum {
+    ILKImageDownloadStateInitialized,
+    ILKImageDownloadStateExecuting,
+    ILKImageDownloadStateFinished
+};
+typedef NSUInteger ILKImageDownloadState;
+
+@interface ILKImageDownload : NSOperation <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
+    BOOL cancelled;
+    ILKImageDownloadState state;
+}
+
+@property (nonatomic, assign) NSTimeInterval startDownload;
+@property (nonatomic, copy) NSString *urlString;
+@property (nonatomic, assign) NSInteger status;
+@property (nonatomic, retain) NSError *error;
+@property (nonatomic, retain) NSMutableData *response;
+
+- (id)initWithUrlString:(NSString*)urlString;
+
+@end
+
 @interface ILKImageDecode : NSOperation {
-    NSUInteger observerCount;
+    BOOL cancelled;
     NSData *imageData;
+    NSUInteger observerCount;
 }
 
 @property (nonatomic, copy) NSString *urlString;
@@ -20,35 +43,18 @@
 
 @end
 
-enum {
-    ILKImageDownloadStateInitialized,
-    ILKImageDownloadStateExecuting,
-    ILKImageDownloadStateCancelled,
-    ILKImageDownloadStateFinished
-};
-typedef NSUInteger ILKImageDownloadState;
-
-@interface ILKImageDownload : NSOperation <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
-    NSUInteger observerCount;
-    ILKImageDownloadState state;
-}
-
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, retain) NSError *error;
-@property (nonatomic, assign) NSInteger status;
-@property (nonatomic, retain) NSMutableData *response;
-
-- (id)initWithUrlString:(NSString*)urlString;
-
-@end
-
 @interface ILKImageView : UIImageView
 
 + (NSCache*)imageCache;
 + (NSOperationQueue*)downloadOperationQueue;
 + (NSOperationQueue*)decodeOperationQueue;
 + (NSMutableDictionary*)currentOperations;
-+ (NSLock*)lockCurrentOperations;
++ (NSMutableDictionary*)currentListeners;
++ (NSLock*)imageViewLock;
+
++ (void)imageForUrlDidFinishLoading:(NSString*)urlString fromOperation:(ILKImageDecode*)operation;
++ (void)addImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
++ (void)removeImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
 
 @property (nonatomic, copy) NSString *urlString;
 
