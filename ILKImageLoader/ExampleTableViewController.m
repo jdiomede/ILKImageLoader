@@ -75,6 +75,7 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
 {
     self.error = error;
+    NSLog(@"Connection failed with error: %@", error.description);
     [self end];
 }
 
@@ -90,6 +91,7 @@
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
     NSError *error = NULL;
+    NSLog(@"%@", [[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding] autorelease]);
     NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingAllowFragments error:&error];
     NSDictionary *photos = [responseDict valueForKey:@"photos"];
     NSArray *photoArray = [photos valueForKey:@"photo"];
@@ -165,8 +167,14 @@
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == NULL) {
+        ILKImageView *imageView = [[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)] autorelease];
         cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        [cell.contentView addSubview:[[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 320)] autorelease]];
+        [cell.contentView addSubview:imageView];
+        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 30)] autorelease];
+        [label setBackgroundColor:[UIColor clearColor]];
+        [label setTextColor:[UIColor grayColor]];
+        [label setText:@"Tap to refresh"];
+        [imageView addSubview:label]; 
     }
     
     for (id subview in cell.contentView.subviews) {
@@ -178,6 +186,30 @@
             }
         }
     }
+    
+    /*static double prevCallTime = 0;
+    static double prevCallOffset = 0;
+    
+    //Simple velocity calculation
+    double curCallTime = [[NSDate date] timeIntervalSince1970];
+    double timeDelta = curCallTime - prevCallTime;
+    double curCallOffset = self.tableView.contentOffset.y;
+    double offsetDelta = curCallOffset - prevCallOffset;
+    double velocity = fabs(offsetDelta / timeDelta);
+    //NSLog(@"Velocity: %f", velocity);
+    if (velocity <= 2000.0) {*/
+    if (indexPath.row > 1) {
+        [ILKImageView preloadImageForUrl:[imageUrls objectAtIndex:(indexPath.row-1)] referenceUrlString:[imageUrls objectAtIndex:indexPath.row]];
+        [ILKImageView preloadImageForUrl:[imageUrls objectAtIndex:(indexPath.row-2)] referenceUrlString:[imageUrls objectAtIndex:indexPath.row]];
+    }
+    if (indexPath.row < imageUrls.count-2) {
+        [ILKImageView preloadImageForUrl:[imageUrls objectAtIndex:(indexPath.row+1)] referenceUrlString:[imageUrls objectAtIndex:indexPath.row]];
+        [ILKImageView preloadImageForUrl:[imageUrls objectAtIndex:(indexPath.row+2)] referenceUrlString:[imageUrls objectAtIndex:indexPath.row]];
+    }
+    //NSLog(@"%d:%d, %d", [[ILKImageView downloadOperationQueue] operationCount], [[ILKImageView decodeOperationQueue] operationCount], [[ILKImageView currentOperations] count]);
+    /*}
+    prevCallTime = curCallTime;
+    prevCallOffset = curCallOffset;*/
     
     return cell;
 }
@@ -245,7 +277,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //nop
+    [self refreshImageUrls];
 }
 
 @end

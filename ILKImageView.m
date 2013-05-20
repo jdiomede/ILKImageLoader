@@ -140,6 +140,13 @@
             ILKImageDownload *downloadOperation = operation;
             [downloadOperation cancel];
         }
+        else if ([operation isKindOfClass:[ILKImageDecode class]]) {
+            ILKImageDecode *decodeOperation = operation;
+            if ([[ILKImageView currentListeners] objectForKey:self.urlString] == NULL) {
+                [[ILKImageView currentOperations] removeObjectForKey:decodeOperation.urlString];
+                [decodeOperation cancel];
+            }
+        }
     }
     [self didChangeValueForKey:@"isCancelled"];
 }
@@ -175,9 +182,10 @@
 static NSCache *imageCache = NULL;
 static NSOperationQueue *downloadOperationQueue = NULL;
 static NSOperationQueue *decodeOperationQueue = NULL;
+static NSMutableDictionary *preloadOperations = NULL;
 static NSMutableDictionary *currentOperations = NULL;
 static NSMutableDictionary *currentListeners = NULL;
-static NSRecursiveLock *imageViewLock = NULL;
+static NSLock *imageViewLock = NULL;
 
 + (NSCache*)imageCache
 {
@@ -196,7 +204,7 @@ static NSRecursiveLock *imageViewLock = NULL;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             downloadOperationQueue = [[NSOperationQueue alloc] init];
-            [downloadOperationQueue setMaxConcurrentOperationCount:25];
+            [downloadOperationQueue setMaxConcurrentOperationCount:5];
         });
     }
     return downloadOperationQueue;
@@ -208,10 +216,21 @@ static NSRecursiveLock *imageViewLock = NULL;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             decodeOperationQueue = [[NSOperationQueue alloc] init];
-            [decodeOperationQueue setMaxConcurrentOperationCount:2];
+            //[decodeOperationQueue setMaxConcurrentOperationCount:2];
         });
     }
     return decodeOperationQueue;
+}
+
++ (NSMutableDictionary*)preloadOperations
+{
+    if (preloadOperations == NULL) {
+        static dispatch_once_t onceToken;
+        dispatch_once(&onceToken, ^{
+            preloadOperations = [[NSMutableDictionary alloc] init];
+        });
+    }
+    return preloadOperations;
 }
 
 + (NSMutableDictionary*)currentOperations
@@ -236,12 +255,12 @@ static NSRecursiveLock *imageViewLock = NULL;
     return currentListeners;
 }
 
-+ (NSRecursiveLock*)imageViewLock
++ (NSLock*)imageViewLock
 {
     if (imageViewLock == NULL) {
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            imageViewLock = [[NSRecursiveLock alloc] init];
+            imageViewLock = [[NSLock alloc] init];
         });
     }
     return imageViewLock;
@@ -250,9 +269,39 @@ static NSRecursiveLock *imageViewLock = NULL;
 + (void)imageForUrlDidFinishLoading:(NSString*)urlString fromOperation:(ILKImageDecode*)operation
 {
     [[[self class] imageViewLock] lock];
+    [[[self class] imageCache] setObject:operation.decodedImage forKey:operation.urlString];
     NSSet *listeners = [[[self class] currentListeners] objectForKey:urlString];
     for (ILKImageView *imageView in [listeners allObjects]) {
         [imageView observeValueForKeyPath:@"isFinished" ofObject:operation change:nil context:nil];
+    }
+    [[[self class] currentOperations] removeObjectForKey:urlString];
+    [[[self class] imageViewLock] unlock];
+}
+
++ (void)preloadImageForUrl:(NSString*)urlString referenceUrlString:(NSString*)referenceUrlString
+{
+    [[[self class] imageViewLock] lock];
+    if ([[[self class] imageCache] objectForKey:urlString] == NULL) {
+        ILKImageDecode *decodeOperation = [[[self class] currentOperations] objectForKey:urlString];
+        if (decodeOperation == NULL) {
+            ILKImageDownload *downloadOperation = [[[ILKImageDownload alloc] initWithUrlString:urlString] autorelease];
+            if (downloadOperation != NULL) {
+                decodeOperation = [[[ILKImageDecode alloc] initWithImageData:downloadOperation.response forUrlString:urlString] autorelease];
+            }
+            if (decodeOperation != NULL) {
+                //NSLog(@"Queue download operation, current download queue count: %d", [[[self class] downloadOperationQueue] operationCount]);
+                [downloadOperation setQueuePriority:NSOperationQueuePriorityLow];
+                [[[self class] downloadOperationQueue] addOperation:downloadOperation];
+                [decodeOperation setQueuePriority:NSOperationQueuePriorityLow];
+                [decodeOperation addDependency:downloadOperation];
+                ILKImageDecode *referenceDecodeOperation = [[ILKImageView currentOperations] objectForKey:referenceUrlString];
+                if (referenceDecodeOperation != NULL) {
+                    [decodeOperation addDependency:referenceDecodeOperation];
+                }
+                [[[self class] decodeOperationQueue] addOperation:decodeOperation];
+            }
+            [[[self class] currentOperations] setValue:decodeOperation forKey:urlString];
+        }
     }
     [[[self class] imageViewLock] unlock];
 }
@@ -276,6 +325,13 @@ static NSRecursiveLock *imageViewLock = NULL;
         }
         [[[self class] currentOperations] setValue:decodeOperation forKey:urlString];
     } else {
+        for (id operation in [decodeOperation dependencies]) {
+            if ([operation isKindOfClass:[ILKImageDownload class]]) {
+                ILKImageDownload *downloadOperation = operation;
+                [downloadOperation setQueuePriority:NSOperationQueuePriorityNormal];
+            }
+        }
+        [decodeOperation setQueuePriority:NSOperationQueuePriorityNormal];
         //[decodeOperation addObserver:imageView forKeyPath:urlString options:NSKeyValueObservingOptionNew context:nil];
     }
     NSMutableSet *listeners = [[[self class] currentListeners] objectForKey:urlString];
@@ -326,20 +382,18 @@ static NSRecursiveLock *imageViewLock = NULL;
 
 - (void)setUrlString:(NSString *)urlString
 {
-    if (![_urlString isEqualToString:urlString]) {
-        if (_urlString) {
-            [[self class] removeImageView:self forUrl:_urlString];
-            [_urlString autorelease];
-            _urlString = NULL;
-        }
-        _urlString = [urlString copy];
-        if (_urlString != NULL) {
-            UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
-            if (cachedImage != NULL) {
-                self.image = cachedImage;
-            } else {
-                [[self class] addImageView:self forUrl:_urlString];
-            }
+    if (_urlString) {
+        [[self class] removeImageView:self forUrl:_urlString];
+        [_urlString autorelease];
+        _urlString = NULL;
+    }
+    _urlString = [urlString copy];
+    if (_urlString != NULL) {
+        UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
+        if (cachedImage != NULL) {
+            self.image = cachedImage;
+        } else {
+            [[self class] addImageView:self forUrl:_urlString];
         }
     }
 }
@@ -350,19 +404,12 @@ static NSRecursiveLock *imageViewLock = NULL;
         ILKImageDecode *operation = object;
         //[operation removeObserver:self forKeyPath:@"isFinished"];
         if ([_urlString isEqualToString:operation.urlString]) {
-            UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
-            if (cachedImage != NULL) {
-                self.image = cachedImage;
-            } else {
-                [[[self class] imageCache] setObject:operation.decodedImage forKey:operation.urlString];
-                [self didFinishDecodingImage:operation.decodedImage];
-            }
+            [self didFinishDecodingImage:operation.decodedImage forUrl:operation.urlString];
         }
-        [[self class] removeImageView:self forUrl:_urlString];
     }
 }
 
-- (void)didFinishDecodingImage:(UIImage *)decodedImage
+- (void)didFinishDecodingImage:(UIImage *)decodedImage forUrl:(NSString*)urlString
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         //NSLog(@"Load image from main thread: %@", [NSThread currentThread]);
@@ -371,6 +418,7 @@ static NSRecursiveLock *imageViewLock = NULL;
         [UIView animateWithDuration:0.5f animations:^{
             [self setAlpha:1.0f];
         }];
+        //[[self class] removeImageView:self forUrl:urlString];
     });
 }
 
