@@ -168,10 +168,7 @@
         }
     }
     if (!cancelled && downloadOperationWasSuccessful) {
-        // TODO: utilize KVO
-        //NSLog(@"Launch image decode: %@ from thread: %@", self, [NSThread currentThread]);
         self.decodedImage = [UIImage imageWithData:imageData];
-        //NSLog(@"%f", [[NSDate date] timeIntervalSince1970] - [downloadOperation startDownload]);
         [ILKImageView imageForUrlDidFinishLoading:_urlString fromOperation:self];
     }
 }
@@ -218,13 +215,11 @@ static NSLock *imageViewLock = NULL;
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
             decodeOperationQueue = [[NSOperationQueue alloc] init];
-            //[decodeOperationQueue setMaxConcurrentOperationCount:2];
         });
     }
     return decodeOperationQueue;
 }
 
-// TODO: remove current operation/listeners dictionaries (if possible)
 + (NSMutableDictionary*)currentOperations
 {
     if (currentOperations == NULL) {
@@ -258,7 +253,6 @@ static NSLock *imageViewLock = NULL;
     return imageViewLock;
 }
 
-// TODO: remove this method once KVO is implemented
 + (void)imageForUrlDidFinishLoading:(NSString*)urlString fromOperation:(ILKImageDecode*)operation
 {
     [[[self class] imageViewLock] lock];
@@ -281,11 +275,7 @@ static NSLock *imageViewLock = NULL;
             decodeOperation = [[[ILKImageDecode alloc] initWithImageData:downloadOperation.response forUrlString:urlString] autorelease];
         }
         if (decodeOperation != NULL) {
-            // TODO: add observer
-            //NSLog(@"Queue download operation, current download queue count: %d", [[[self class] downloadOperationQueue] operationCount]);
-            //[downloadOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
             [[[self class] downloadOperationQueue] addOperation:downloadOperation];
-            //[decodeOperation addObserver:imageView forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
             [decodeOperation addDependency:downloadOperation];
             [[[self class] decodeOperationQueue] addOperation:decodeOperation];
         }
@@ -298,7 +288,6 @@ static NSLock *imageViewLock = NULL;
             }
         }
         [decodeOperation setQueuePriority:NSOperationQueuePriorityNormal];
-        //[decodeOperation addObserver:imageView forKeyPath:urlString options:NSKeyValueObservingOptionNew context:nil];
     }
     NSMutableSet *listeners = [[[self class] currentListeners] objectForKey:urlString];
     if (listeners != NULL) {
@@ -372,8 +361,6 @@ static NSLock *imageViewLock = NULL;
 {
     if ([object isKindOfClass:[ILKImageDecode class]]) {
         ILKImageDecode *operation = object;
-        // TODO: remove observer
-        //[operation removeObserver:self forKeyPath:@"isFinished"];
         if ([_urlString isEqualToString:operation.urlString]) {
             [self didFinishDecodingImage:operation.decodedImage forUrl:operation.urlString];
         }
