@@ -48,12 +48,10 @@ typedef NSUInteger ILKImageDownloadState;
 + (NSCache*)imageCache;
 + (NSOperationQueue*)downloadOperationQueue;
 + (NSOperationQueue*)decodeOperationQueue;
-+ (NSMutableDictionary*)preloadOperations;
 + (NSMutableDictionary*)currentOperations;
 + (NSMutableDictionary*)currentListeners;
 + (NSRecursiveLock*)imageViewLock;
 
-+ (void)preloadImageForUrl:(NSString*)urlString referenceUrlString:(NSString*)referenceUrlString;
 + (void)imageForUrlDidFinishLoading:(NSString*)urlString fromOperation:(ILKImageDecode*)operation;
 + (void)addImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
 + (void)removeImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;

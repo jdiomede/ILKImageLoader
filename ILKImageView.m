@@ -8,6 +8,8 @@
 
 #import "ILKImageView.h"
 
+#pragma mark - ILKImageDownload
+
 @implementation ILKImageDownload
 
 - (void)dealloc
@@ -23,10 +25,10 @@
     self = [super init];
     if (self) {
         cancelled = NO;
-        self.error = NULL;
-        self.urlString = urlString;
-        self.response = [NSMutableData data];
         state = ILKImageDownloadStateInitialized;
+        _error = NULL;
+        _urlString = [urlString copy];
+        _response = [[NSMutableData data] retain];
     }
     return self;
 }
@@ -39,7 +41,6 @@
         [self didChangeValueForKey:@"isExecuting"];
         NSURL *url = [NSURL URLWithString:self.urlString];
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
-        //NSLog(@"Launch image download: %@ from thread: %@", self, [NSThread currentThread]);
         _startDownload = [[NSDate date] timeIntervalSince1970];
         [NSURLConnection connectionWithRequest:request delegate:self];
         [[NSRunLoop currentRunLoop] run];
@@ -51,7 +52,6 @@
 
 - (void)cancel
 {
-    //NSLog(@"%@ is cancelled", self);
     [self willChangeValueForKey:@"isCancelled"];
     cancelled = YES;
     [self didChangeValueForKey:@"isCancelled"];
@@ -92,7 +92,6 @@
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     if (!cancelled) {
-        //NSLog(@"Append image data from thread: %@", [NSThread currentThread]);
         [self.response appendData:data];
     } else {
         [connection cancel];
@@ -108,6 +107,8 @@
 
 @end
 
+#pragma mark - ILKImageDecode
+
 @implementation ILKImageDecode
 
 - (void)dealloc
@@ -122,17 +123,16 @@
 {
     self = [super init];
     if (self) {
+        observerCount = 0;
         imageData = [initImageData retain];
         _decodedImage = NULL;
-        self.urlString = urlString;
-        observerCount = 0;
+        _urlString = [urlString copy];
     }
     return self;
 }
 
 - (void)cancel
 {
-    //NSLog(@"%@ is cancelled", self);
     [self willChangeValueForKey:@"isCancelled"];
     cancelled = YES;
     for (id operation in [self dependencies]) {
@@ -168,6 +168,7 @@
         }
     }
     if (!cancelled && downloadOperationWasSuccessful) {
+        // TODO: utilize KVO
         //NSLog(@"Launch image decode: %@ from thread: %@", self, [NSThread currentThread]);
         self.decodedImage = [UIImage imageWithData:imageData];
         //NSLog(@"%f", [[NSDate date] timeIntervalSince1970] - [downloadOperation startDownload]);
@@ -177,12 +178,13 @@
 
 @end
 
+#pragma mark - ILKImageView
+
 @implementation ILKImageView
 
 static NSCache *imageCache = NULL;
 static NSOperationQueue *downloadOperationQueue = NULL;
 static NSOperationQueue *decodeOperationQueue = NULL;
-static NSMutableDictionary *preloadOperations = NULL;
 static NSMutableDictionary *currentOperations = NULL;
 static NSMutableDictionary *currentListeners = NULL;
 static NSLock *imageViewLock = NULL;
@@ -222,17 +224,7 @@ static NSLock *imageViewLock = NULL;
     return decodeOperationQueue;
 }
 
-+ (NSMutableDictionary*)preloadOperations
-{
-    if (preloadOperations == NULL) {
-        static dispatch_once_t onceToken;
-        dispatch_once(&onceToken, ^{
-            preloadOperations = [[NSMutableDictionary alloc] init];
-        });
-    }
-    return preloadOperations;
-}
-
+// TODO: remove current operation/listeners dictionaries (if possible)
 + (NSMutableDictionary*)currentOperations
 {
     if (currentOperations == NULL) {
@@ -266,6 +258,7 @@ static NSLock *imageViewLock = NULL;
     return imageViewLock;
 }
 
+// TODO: remove this method once KVO is implemented
 + (void)imageForUrlDidFinishLoading:(NSString*)urlString fromOperation:(ILKImageDecode*)operation
 {
     [[[self class] imageViewLock] lock];
@@ -275,34 +268,6 @@ static NSLock *imageViewLock = NULL;
         [imageView observeValueForKeyPath:@"isFinished" ofObject:operation change:nil context:nil];
     }
     [[[self class] currentOperations] removeObjectForKey:urlString];
-    [[[self class] imageViewLock] unlock];
-}
-
-+ (void)preloadImageForUrl:(NSString*)urlString referenceUrlString:(NSString*)referenceUrlString
-{
-    [[[self class] imageViewLock] lock];
-    if ([[[self class] imageCache] objectForKey:urlString] == NULL) {
-        ILKImageDecode *decodeOperation = [[[self class] currentOperations] objectForKey:urlString];
-        if (decodeOperation == NULL) {
-            ILKImageDownload *downloadOperation = [[[ILKImageDownload alloc] initWithUrlString:urlString] autorelease];
-            if (downloadOperation != NULL) {
-                decodeOperation = [[[ILKImageDecode alloc] initWithImageData:downloadOperation.response forUrlString:urlString] autorelease];
-            }
-            if (decodeOperation != NULL) {
-                //NSLog(@"Queue download operation, current download queue count: %d", [[[self class] downloadOperationQueue] operationCount]);
-                [downloadOperation setQueuePriority:NSOperationQueuePriorityLow];
-                [[[self class] downloadOperationQueue] addOperation:downloadOperation];
-                [decodeOperation setQueuePriority:NSOperationQueuePriorityLow];
-                [decodeOperation addDependency:downloadOperation];
-                ILKImageDecode *referenceDecodeOperation = [[ILKImageView currentOperations] objectForKey:referenceUrlString];
-                if (referenceDecodeOperation != NULL) {
-                    [decodeOperation addDependency:referenceDecodeOperation];
-                }
-                [[[self class] decodeOperationQueue] addOperation:decodeOperation];
-            }
-            [[[self class] currentOperations] setValue:decodeOperation forKey:urlString];
-        }
-    }
     [[[self class] imageViewLock] unlock];
 }
 
@@ -316,6 +281,7 @@ static NSLock *imageViewLock = NULL;
             decodeOperation = [[[ILKImageDecode alloc] initWithImageData:downloadOperation.response forUrlString:urlString] autorelease];
         }
         if (decodeOperation != NULL) {
+            // TODO: add observer
             //NSLog(@"Queue download operation, current download queue count: %d", [[[self class] downloadOperationQueue] operationCount]);
             //[downloadOperation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
             [[[self class] downloadOperationQueue] addOperation:downloadOperation];
@@ -374,8 +340,7 @@ static NSLock *imageViewLock = NULL;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.urlString = urlString;
-        
+        _urlString = [urlString copy];
     }
     return self;
 }
@@ -391,7 +356,7 @@ static NSLock *imageViewLock = NULL;
     if (_urlString != NULL) {
         UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
         if (cachedImage != NULL) {
-            self.image = cachedImage;
+            [self didFinishDecodingImage:cachedImage forUrl:_urlString];
         } else {
             [[self class] addImageView:self forUrl:_urlString];
         }
@@ -402,6 +367,7 @@ static NSLock *imageViewLock = NULL;
 {
     if ([object isKindOfClass:[ILKImageDecode class]]) {
         ILKImageDecode *operation = object;
+        // TODO: remove observer
         //[operation removeObserver:self forKeyPath:@"isFinished"];
         if ([_urlString isEqualToString:operation.urlString]) {
             [self didFinishDecodingImage:operation.decodedImage forUrl:operation.urlString];
@@ -412,13 +378,11 @@ static NSLock *imageViewLock = NULL;
 - (void)didFinishDecodingImage:(UIImage *)decodedImage forUrl:(NSString*)urlString
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        //NSLog(@"Load image from main thread: %@", [NSThread currentThread]);
-        [self setAlpha:0.0f];
+        self.alpha = 0.0f;
         self.image = decodedImage;
         [UIView animateWithDuration:0.5f animations:^{
-            [self setAlpha:1.0f];
+            self.alpha = 1.0f;
         }];
-        //[[self class] removeImageView:self forUrl:urlString];
     });
 }
 

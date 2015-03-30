@@ -23,7 +23,7 @@ typedef NSUInteger ILKImageUrlDownloadState;
 
 @property (nonatomic, retain) NSError *error;
 @property (nonatomic, assign) NSInteger status;
-@property (nonatomic, retain) NSMutableArray *arrayOfUrls;
+@property (nonatomic, retain) NSArray *arrayOfUrls;
 
 @end
 
