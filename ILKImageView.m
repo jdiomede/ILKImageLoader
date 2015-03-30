@@ -356,8 +356,12 @@ static NSLock *imageViewLock = NULL;
     if (_urlString != NULL) {
         UIImage *cachedImage = [[[self class] imageCache] objectForKey:_urlString];
         if (cachedImage != NULL) {
-            // TODO: only add fade-in during reloading
-            [self didFinishDecodingImage:cachedImage forUrl:_urlString];
+            if (self.refresh) {
+                self.refresh = NO;
+                [self didFinishDecodingImage:cachedImage forUrl:_urlString];
+            } else {
+                self.image = cachedImage;
+            }
         } else {
             [[self class] addImageView:self forUrl:_urlString];
         }

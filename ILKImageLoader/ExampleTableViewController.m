@@ -120,6 +120,12 @@
 
 @implementation ExampleTableViewController
 
+- (void)dealloc {
+    [imageUrls release];
+    [operationQueue release];
+    [super dealloc];
+}
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -133,6 +139,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.title = @"Recent Photos on Flickr";
+    self.tableView.tableFooterView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     self.refreshControl = [[[UIRefreshControl alloc] init] autorelease];
     [self.refreshControl addTarget:self action:@selector(refreshImageUrls) forControlEvents:UIControlEventValueChanged];
     [self refreshImageUrls];
@@ -141,7 +149,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // TODO: validate cache is cleared
+    // TODO: proactively clear cache
 }
 
 #pragma mark - Table view data source
@@ -174,7 +182,7 @@
     if (![cell.ilkImageView.urlString isEqualToString:[imageUrls objectAtIndex:indexPath.row]]) {
         cell.ilkImageView.image = nil;
         cell.ilkImageView.urlString = [imageUrls objectAtIndex:indexPath.row];
-        cell.mainLabel.text = @"Tap to refresh";
+        cell.mainLabel.text = @"Tap to reload data source";
     }
   
     return cell;
@@ -182,7 +190,6 @@
 
 - (void)refreshImageUrls
 {
-    [self.refreshControl endRefreshing];
     ILKImageUrlDownload *operation = [[[ILKImageUrlDownload alloc] init] autorelease];
     [operation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
     [operationQueue addOperation:operation];
@@ -194,6 +201,8 @@
         ILKImageUrlDownload *operation = object;
         [operation removeObserver:self forKeyPath:@"isFinished"];
         dispatch_async(dispatch_get_main_queue(), ^{
+            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [self.refreshControl endRefreshing];
             imageUrls = operation.arrayOfUrls.copy;
             [self.tableView reloadData];
         });
@@ -204,6 +213,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    for (ExampleTableViewCell *cell in self.tableView.visibleCells) {
+        cell.ilkImageView.refresh = YES;
+    }
     [self refreshImageUrls];
 }
 

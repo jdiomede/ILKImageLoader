@@ -56,6 +56,7 @@ typedef NSUInteger ILKImageDownloadState;
 + (void)addImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
 + (void)removeImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
 
+@property (nonatomic, assign) BOOL refresh;
 @property (nonatomic, copy) NSString *urlString;
 
 - (id)initWithFrame:(CGRect)frame forUrlString:(NSString*)initURLString;

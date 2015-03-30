@@ -22,7 +22,8 @@
     self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
     self.exampleTableViewController = [[[ExampleTableViewController alloc] initWithStyle:UITableViewStylePlain] autorelease];
     self.exampleTableViewController.tableView.frame = [UIScreen mainScreen].bounds;
-    self.window.rootViewController = self.exampleTableViewController;
+    UINavigationController *navigationController = [[[UINavigationController alloc] initWithRootViewController:self.exampleTableViewController] autorelease];
+    self.window.rootViewController = navigationController;
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
