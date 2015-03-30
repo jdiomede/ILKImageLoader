@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C4C95701AC8D741002ED1D2 /* ExampleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4C956F1AC8D741002ED1D2 /* ExampleTableViewCell.m */; };
 		66F172531735C6C800C2120B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172521735C6C800C2120B /* UIKit.framework */; };
 		66F172551735C6C800C2120B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172541735C6C800C2120B /* Foundation.framework */; };
 		66F172571735C6C800C2120B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172561735C6C800C2120B /* CoreGraphics.framework */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5C4C956E1AC8D741002ED1D2 /* ExampleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleTableViewCell.h; sourceTree = "<group>"; };
+		5C4C956F1AC8D741002ED1D2 /* ExampleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleTableViewCell.m; sourceTree = "<group>"; };
 		66F1724F1735C6C800C2120B /* ILKImageLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ILKImageLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66F172521735C6C800C2120B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		66F172541735C6C800C2120B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -88,6 +91,8 @@
 				66F172621735C6C800C2120B /* AppDelegate.m */,
 				66F172701735C73400C2120B /* ILKImageView.h */,
 				66F1726F1735C73400C2120B /* ILKImageView.m */,
+				5C4C956E1AC8D741002ED1D2 /* ExampleTableViewCell.h */,
+				5C4C956F1AC8D741002ED1D2 /* ExampleTableViewCell.m */,
 				66F172721736DE5F00C2120B /* ExampleTableViewController.h */,
 				66F172731736DE6000C2120B /* ExampleTableViewController.m */,
 				66F172591735C6C800C2120B /* Supporting Files */,
@@ -174,6 +179,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C4C95701AC8D741002ED1D2 /* ExampleTableViewCell.m in Sources */,
 				66F1725F1735C6C800C2120B /* main.m in Sources */,
 				66F172631735C6C800C2120B /* AppDelegate.m in Sources */,
 				66F172711735C73400C2120B /* ILKImageView.m in Sources */,

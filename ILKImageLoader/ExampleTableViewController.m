@@ -8,6 +8,8 @@
 
 #import "ExampleTableViewController.h"
 
+#import "ExampleTableViewCell.h"
+
 #pragma mark - ILKImageUrlDownload
 
 @implementation ILKImageUrlDownload
@@ -94,7 +96,7 @@
     NSDictionary *responseDict = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingAllowFragments error:&error];
     NSDictionary *photos = [responseDict valueForKey:@"photos"];
     NSArray *photoArray = [photos valueForKey:@"photo"];
-    NSMutableArray *mutableArray = [NSMutableArray array];
+    NSMutableArray *mutableArray = [[[NSMutableArray alloc] init] autorelease];
     for (NSDictionary *photo in photoArray) {
         //http://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
         NSString *photoUrl = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@.jpg",
@@ -104,7 +106,7 @@
                               [photo valueForKey:@"secret"]];
         [mutableArray addObject:photoUrl];
     }
-    self.arrayOfUrls = mutableArray.copy;
+    self.arrayOfUrls = [mutableArray.copy autorelease];
     [self end];
 }
 
@@ -131,6 +133,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.refreshControl = [[[UIRefreshControl alloc] init] autorelease];
+    [self.refreshControl addTarget:self action:@selector(refreshImageUrls) forControlEvents:UIControlEventValueChanged];
     [self refreshImageUrls];
 }
 
@@ -161,37 +165,24 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    static NSString *CellIdentifier = @"ExampleTableViewCell";
+    ExampleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == NULL) {
-        ILKImageView *imageView = [[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)] autorelease];
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        imageView.clipsToBounds = YES;
-        cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-        [cell.contentView addSubview:imageView];
-        UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)] autorelease];
-        [label setBackgroundColor:[UIColor clearColor]];
-        [label setTextColor:[UIColor grayColor]];
-        [label setText:@"Tap to refresh"];
-        [imageView addSubview:label]; 
+        cell = [[[ExampleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
     }
   
-    // TODO: subclass UITableViewCell
-    for (id subview in cell.contentView.subviews) {
-        if ([subview isKindOfClass:[ILKImageView class]]) {
-            ILKImageView *imageView = subview;
-            if (![imageView.urlString isEqualToString:[imageUrls objectAtIndex:indexPath.row]]) {
-                imageView.image = nil;
-                imageView.urlString = [imageUrls objectAtIndex:indexPath.row];
-            }
-        }
+    if (![cell.ilkImageView.urlString isEqualToString:[imageUrls objectAtIndex:indexPath.row]]) {
+        cell.ilkImageView.image = nil;
+        cell.ilkImageView.urlString = [imageUrls objectAtIndex:indexPath.row];
+        cell.mainLabel.text = @"Tap to refresh";
     }
-    
+  
     return cell;
 }
 
 - (void)refreshImageUrls
 {
+    [self.refreshControl endRefreshing];
     ILKImageUrlDownload *operation = [[[ILKImageUrlDownload alloc] init] autorelease];
     [operation addObserver:self forKeyPath:@"isFinished" options:NSKeyValueObservingOptionNew context:nil];
     [operationQueue addOperation:operation];
