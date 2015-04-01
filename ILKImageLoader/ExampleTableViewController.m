@@ -120,7 +120,8 @@
 
 @implementation ExampleTableViewController
 
-- (void)dealloc {
+- (void)dealloc
+{
     [imageUrls release];
     [operationQueue release];
     [super dealloc];
@@ -161,13 +162,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     return imageUrls.count;
 }
 
@@ -184,7 +183,7 @@
         cell.ilkImageView.urlString = [imageUrls objectAtIndex:indexPath.row];
         cell.mainLabel.text = @"Tap to reload data source";
     }
-  
+    
     return cell;
 }
 

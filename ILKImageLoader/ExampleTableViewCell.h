@@ -11,7 +11,7 @@
 
 @interface ExampleTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) UILabel *mainLabel;
-@property (nonatomic, strong) ILKImageView *ilkImageView;
+@property (nonatomic, retain) UILabel *mainLabel;
+@property (nonatomic, retain) ILKImageView *ilkImageView;
 
 @end
