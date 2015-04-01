@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5C4C95701AC8D741002ED1D2 /* ExampleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C4C956F1AC8D741002ED1D2 /* ExampleTableViewCell.m */; };
 		5C4C95721AC9C532002ED1D2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5C4C95711AC9C532002ED1D2 /* Images.xcassets */; };
+		5C6444541ACC9DF7005FEE28 /* ILKImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F1726F1735C73400C2120B /* ILKImageView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		5C6444551ACC9DFD005FEE28 /* ILKImageView.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 66F172701735C73400C2120B /* ILKImageView.h */; };
 		66F172531735C6C800C2120B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172521735C6C800C2120B /* UIKit.framework */; };
 		66F172551735C6C800C2120B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172541735C6C800C2120B /* Foundation.framework */; };
 		66F172571735C6C800C2120B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66F172561735C6C800C2120B /* CoreGraphics.framework */; };
@@ -22,10 +24,24 @@
 		66F172741736DE6000C2120B /* ExampleTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 66F172731736DE6000C2120B /* ExampleTableViewController.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		5C64443B1ACC9DDB005FEE28 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				5C6444551ACC9DFD005FEE28 /* ILKImageView.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		5C4C956E1AC8D741002ED1D2 /* ExampleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExampleTableViewCell.h; sourceTree = "<group>"; };
 		5C4C956F1AC8D741002ED1D2 /* ExampleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ExampleTableViewCell.m; sourceTree = "<group>"; };
 		5C4C95711AC9C532002ED1D2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		5C64443D1ACC9DDB005FEE28 /* libImageLoaderKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libImageLoaderKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		66F1724F1735C6C800C2120B /* ILKImageLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ILKImageLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		66F172521735C6C800C2120B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		66F172541735C6C800C2120B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -46,6 +62,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5C64443A1ACC9DDB005FEE28 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F1724C1735C6C800C2120B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -72,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				66F1724F1735C6C800C2120B /* ILKImageLoader.app */,
+				5C64443D1ACC9DDB005FEE28 /* libImageLoaderKit.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -120,6 +144,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5C64443C1ACC9DDB005FEE28 /* ImageLoaderKit */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5C6444521ACC9DDB005FEE28 /* Build configuration list for PBXNativeTarget "ImageLoaderKit" */;
+			buildPhases = (
+				5C6444391ACC9DDB005FEE28 /* Sources */,
+				5C64443A1ACC9DDB005FEE28 /* Frameworks */,
+				5C64443B1ACC9DDB005FEE28 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = ImageLoaderKit;
+			productName = ImageLoaderKit;
+			productReference = 5C64443D1ACC9DDB005FEE28 /* libImageLoaderKit.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		66F1724E1735C6C800C2120B /* ILKImageLoader */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 66F1726C1735C6C800C2120B /* Build configuration list for PBXNativeTarget "ILKImageLoader" */;
@@ -145,6 +186,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "James Diomede";
+				TargetAttributes = {
+					5C64443C1ACC9DDB005FEE28 = {
+						CreatedOnToolsVersion = 6.2;
+					};
+				};
 			};
 			buildConfigurationList = 66F1724A1735C6C800C2120B /* Build configuration list for PBXProject "ILKImageLoader" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -159,6 +205,7 @@
 			projectRoot = "";
 			targets = (
 				66F1724E1735C6C800C2120B /* ILKImageLoader */,
+				5C64443C1ACC9DDB005FEE28 /* ImageLoaderKit */,
 			);
 		};
 /* End PBXProject section */
@@ -179,6 +226,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5C6444391ACC9DDB005FEE28 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C6444541ACC9DF7005FEE28 /* ILKImageView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		66F1724B1735C6C800C2120B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -205,6 +260,58 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5C64444E1ACC9DDB005FEE28 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		5C64444F1ACC9DDB005FEE28 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		66F1726A1735C6C800C2120B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -290,6 +397,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5C6444521ACC9DDB005FEE28 /* Build configuration list for PBXNativeTarget "ImageLoaderKit" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5C64444E1ACC9DDB005FEE28 /* Debug */,
+				5C64444F1ACC9DDB005FEE28 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		66F1724A1735C6C800C2120B /* Build configuration list for PBXProject "ILKImageLoader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
