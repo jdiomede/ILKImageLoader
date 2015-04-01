@@ -28,7 +28,7 @@
         state = ILKImageDownloadStateInitialized;
         _error = NULL;
         _urlString = [urlString copy];
-        _response = [[NSMutableData data] retain];
+        _response = [[NSMutableData alloc] init];
     }
     return self;
 }
@@ -261,6 +261,7 @@ static NSLock *imageViewLock = NULL;
     for (ILKImageView *imageView in [listeners allObjects]) {
         [imageView observeValueForKeyPath:@"isFinished" ofObject:operation change:nil context:nil];
     }
+    [[[self class] currentListeners] removeObjectForKey:urlString];
     [[[self class] currentOperations] removeObjectForKey:urlString];
     [[[self class] imageViewLock] unlock];
 }

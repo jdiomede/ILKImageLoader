@@ -13,6 +13,7 @@
 
 - (void)dealloc
 {
+    [_exampleTableViewController release];
     [_window release];
     [super dealloc];
 }

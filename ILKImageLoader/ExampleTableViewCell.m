@@ -14,13 +14,15 @@
 
 @implementation ExampleTableViewCell
 
-- (void)dealloc {
+- (void)dealloc
+{
     [_ilkImageView release];
     [_mainLabel release];
     [super dealloc];
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
       // TODO: remove clips to bounds, truncate image
@@ -38,7 +40,8 @@
     return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 }
 
