@@ -330,7 +330,7 @@ static NSLock *imageViewLock = NULL;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _urlString = [urlString copy];
+        self.urlString = urlString;
     }
     return self;
 }
