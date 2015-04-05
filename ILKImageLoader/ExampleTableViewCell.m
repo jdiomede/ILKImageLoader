@@ -25,17 +25,14 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-      // TODO: remove clips to bounds, truncate image
-      _ilkImageView = [[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)] autorelease];
-      _ilkImageView.contentMode = UIViewContentModeScaleAspectFill;
-      _ilkImageView.clipsToBounds = YES;
-      [self.contentView addSubview:_ilkImageView];
-      _mainLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)] autorelease];
-      _mainLabel.backgroundColor = [UIColor clearColor];
-      _mainLabel.textColor = [UIColor grayColor];
-      _mainLabel.adjustsFontSizeToFitWidth = YES;
-      _mainLabel.textAlignment = NSTextAlignmentCenter;
-      [self.contentView addSubview:_mainLabel];
+        _ilkImageView = [[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)] autorelease];
+        [self.contentView addSubview:_ilkImageView];
+        _mainLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)] autorelease];
+        _mainLabel.backgroundColor = [UIColor clearColor];
+        _mainLabel.textColor = [UIColor grayColor];
+        _mainLabel.adjustsFontSizeToFitWidth = YES;
+        _mainLabel.textAlignment = NSTextAlignmentCenter;
+        [self.contentView addSubview:_mainLabel];
     }
     return self;
 }

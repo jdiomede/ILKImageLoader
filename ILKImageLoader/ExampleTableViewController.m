@@ -99,7 +99,7 @@
     NSMutableArray *mutableArray = [[[NSMutableArray alloc] init] autorelease];
     for (NSDictionary *photo in photoArray) {
         //http://farm{farm-id}.staticflickr.com/{server-id}/{id}_{secret}.jpg
-        NSString *photoUrl = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@.jpg",
+        NSString *photoUrl = [NSString stringWithFormat:@"http://farm%@.staticflickr.com/%@/%@_%@_b.jpg",
                               [photo valueForKey:@"farm"],
                               [photo valueForKey:@"server"],
                               [photo valueForKey:@"id"],
@@ -141,6 +141,7 @@
 {
     [super viewDidLoad];
     self.title = @"Recent Photos on Flickr";
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableFooterView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     self.refreshControl = [[[UIRefreshControl alloc] init] autorelease];
     [self.refreshControl addTarget:self action:@selector(refreshImageUrls) forControlEvents:UIControlEventValueChanged];
@@ -180,7 +181,7 @@
   
     if (![cell.ilkImageView.urlString isEqualToString:[imageUrls objectAtIndex:indexPath.row]]) {
         cell.ilkImageView.image = nil;
-        cell.ilkImageView.urlString = [imageUrls objectAtIndex:indexPath.row];
+      [cell.ilkImageView setUrlString:[imageUrls objectAtIndex:indexPath.row] withAttributes:@{ILKViewContentModeAttributeName:@(ILKViewContentModeScaleAspectFill)}];
         cell.mainLabel.text = @"Tap to reload data source";
     }
     

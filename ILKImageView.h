@@ -8,42 +8,29 @@
 
 #import <UIKit/UIKit.h>
 
-enum {
-    ILKImageDownloadStateInitialized,
-    ILKImageDownloadStateExecuting,
-    ILKImageDownloadStateFinished
+extern NSString *const ILKImageSizeAttributeName;
+extern NSString *const ILKViewContentModeAttributeName;
+extern NSString *const ILKCornerRadiusAttributeName;
+extern NSString *const ILKRectCornerAttributeName;
+
+typedef NS_ENUM(NSInteger, ILKViewContentMode) {
+  ILKViewContentModeScaleAspectFit,
+  ILKViewContentModeScaleAspectFill
 };
-typedef NSUInteger ILKImageDownloadState;
 
-@interface ILKImageDownload : NSOperation <NSURLConnectionDelegate, NSURLConnectionDataDelegate> {
-    BOOL cancelled;
-    ILKImageDownloadState state;
+typedef NS_ENUM(NSUInteger, ILKRectCorner){
+  ILKRectCornerBottomLeft  = 1 << 0,
+  ILKRectCornerBottomRight = 1 << 1,
+  ILKRectCornerTopLeft     = 1 << 2,
+  ILKRectCornerTopRight    = 1 << 3,
+  ILKRectCornerAllCorners  = ~0UL
+};
+
+@class ILKImageDecode;
+
+@interface ILKImageView : UIImageView {
+  NSString *cacheKey;
 }
-
-@property (nonatomic, assign) NSTimeInterval startDownload;
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, assign) NSInteger status;
-@property (nonatomic, retain) NSError *error;
-@property (nonatomic, retain) NSMutableData *response;
-
-- (id)initWithUrlString:(NSString*)urlString;
-
-@end
-
-@interface ILKImageDecode : NSOperation {
-    BOOL cancelled;
-    NSData *imageData;
-    NSUInteger observerCount;
-}
-
-@property (nonatomic, copy) NSString *urlString;
-@property (nonatomic, retain) UIImage *decodedImage;
-
-- (id)initWithImageData:(NSData *)initImageData forUrlString:(NSString*)urlString;
-
-@end
-
-@interface ILKImageView : UIImageView
 
 + (NSCache*)imageCache;
 + (NSOperationQueue*)downloadOperationQueue;
@@ -52,13 +39,17 @@ typedef NSUInteger ILKImageDownloadState;
 + (NSMutableDictionary*)currentListeners;
 + (NSRecursiveLock*)imageViewLock;
 
-+ (void)imageForUrlDidFinishLoading:(NSString*)urlString fromOperation:(ILKImageDecode*)operation;
-+ (void)addImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
-+ (void)removeImageView:(ILKImageView*)imageView forUrl:(NSString*)urlString;
++ (void)addImageView:(ILKImageView*)imageView forUrlString:(NSString*)urlString withAttributes:(NSDictionary*)attributes;
++ (void)removeImageView:(ILKImageView*)imageView forCacheKey:(NSString*)cacheKey;
++ (void)imageDidFinishLoadingForCacheKey:(NSString*)cacheKey fromOperation:(ILKImageDecode*)operation;
+
++ (NSString *)cacheKeyForUrlString:(NSString *)urlString withAttributes:(NSDictionary *)attributes;
 
 @property (nonatomic, assign) BOOL refresh;
 @property (nonatomic, copy) NSString *urlString;
 
-- (id)initWithFrame:(CGRect)frame forUrlString:(NSString*)initURLString;
+- (void)setUrlString:(NSString*)urlString withAttributes:(NSDictionary*)attributes;
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context;
+- (void)didFinishProcessingImage:(UIImage *)decodedImage forCacheKey:(NSString*)cacheKey;
 
 @end
