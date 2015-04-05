@@ -114,9 +114,7 @@
 
 #pragma mark - ExampleTableViewController
 
-@interface ExampleTableViewController ()
-
-@end
+static NSString * const reuseIdentifier = @"ExampleTableViewCell";
 
 @implementation ExampleTableViewController
 
@@ -140,6 +138,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self.tableView registerClass:[ExampleTableViewCell class] forCellReuseIdentifier:reuseIdentifier];
     self.title = @"Recent Photos on Flickr";
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableFooterView = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
@@ -173,15 +172,11 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"ExampleTableViewCell";
-    ExampleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == NULL) {
-        cell = [[[ExampleTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier] autorelease];
-    }
+    ExampleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
   
     if (![cell.ilkImageView.urlString isEqualToString:[imageUrls objectAtIndex:indexPath.row]]) {
         cell.ilkImageView.image = nil;
-      [cell.ilkImageView setUrlString:[imageUrls objectAtIndex:indexPath.row] withAttributes:@{ILKViewContentModeAttributeName:@(ILKViewContentModeScaleAspectFill)}];
+        [cell.ilkImageView setUrlString:imageUrls[indexPath.row] withAttributes:@{ILKImageSizeAttributeName:[NSValue valueWithCGSize:CGSizeMake([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)], ILKViewContentModeAttributeName:@(ILKViewContentModeScaleAspectFill)}];
         cell.mainLabel.text = @"Tap to reload data source";
     }
     

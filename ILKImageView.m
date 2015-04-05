@@ -227,7 +227,17 @@ typedef NSUInteger ILKImageDownloadState;
             drawRect = CGRectMake((imageSize.width-aspectFillSize.width)/2.0f, (imageSize.height-aspectFillSize.height)/2.0f, aspectFillSize.width, aspectFillSize.height);
         }
       
-        CGContextRef context = CGBitmapContextCreate(nil, imageSize.width, imageSize.height, CGImageGetBitsPerComponent(decodedImage.CGImage), 0, CGImageGetColorSpace(decodedImage.CGImage), kCGBitmapByteOrderDefault|kCGImageAlphaPremultipliedFirst);
+        CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(decodedImage.CGImage);
+        if ((bitmapInfo & kCGBitmapAlphaInfoMask) == kCGImageAlphaNoneSkipFirst) {
+            bitmapInfo &= (!kCGBitmapAlphaInfoMask | kCGImageAlphaPremultipliedFirst);
+        }
+        else if ((bitmapInfo & kCGBitmapAlphaInfoMask) == kCGImageAlphaNoneSkipLast) {
+            bitmapInfo &= (!kCGBitmapAlphaInfoMask | kCGImageAlphaPremultipliedLast);
+        }
+        else if ((bitmapInfo & kCGBitmapAlphaInfoMask) == kCGImageAlphaNone) {
+            // TODO: add alpha channel to image data
+        }
+        CGContextRef context = CGBitmapContextCreate(nil, imageSize.width, imageSize.height, CGImageGetBitsPerComponent(decodedImage.CGImage), 0, CGImageGetColorSpace(decodedImage.CGImage), bitmapInfo);
       
         if ([self.attributes[ILKCornerRadiusAttributeName] floatValue] > 0.0f) {
             CGFloat scale = [UIScreen mainScreen].scale;
@@ -426,15 +436,18 @@ static NSLock *imageViewLock = nil;
 - (void)setUrlString:(NSString *)urlString withAttributes:(NSDictionary *)attributes
 {
     if (urlString == nil) {
+        // Nop for a nil url, should set image property to nil to clear
         return;
     }
     if (_urlString) {
+        // Attempt to remove the previous image operations
         [[self class] removeImageView:self forCacheKey:cacheKey];
         [_urlString autorelease];
         _urlString = nil;
     }
     _urlString = [urlString copy];
     if (_urlString != nil) {
+        // Prepare attributes
         NSMutableDictionary *mutableAttributes = [NSMutableDictionary dictionary];
         if (attributes != nil) {
             [mutableAttributes addEntriesFromDictionary:attributes];
@@ -445,16 +458,25 @@ static NSLock *imageViewLock = nil;
         if (mutableAttributes[ILKViewContentModeAttributeName] == nil) {
             mutableAttributes[ILKViewContentModeAttributeName] = @(ILKViewContentModeScaleAspectFill);
         }
+        // Check for valid image size
+        CGSize imageSize = [mutableAttributes[ILKImageSizeAttributeName] CGSizeValue];
+        NSAssert(imageSize.width > 0.0f, @"ERROR: ILKImageSizeAttribute width cannot be zero");
+        NSAssert(imageSize.height > 0.0f, @"ERROR: ILKImageSizeAttribute height cannot be zero");
+        // Cache lookup
         cacheKey = [[[self class] cacheKeyForUrlString:urlString withAttributes:[mutableAttributes.copy autorelease]] retain];
         UIImage *cachedImage = [[[self class] imageCache] objectForKey:cacheKey];
         if (cachedImage != nil) {
+            // If refreshed, re-animate image loading
             if (_refresh) {
                 _refresh = NO;
                 [self didFinishProcessingImage:cachedImage forCacheKey:cacheKey];
-            } else {
+            }
+            // Else, load image instantly
+            else {
                 self.image = cachedImage;
             }
         } else {
+            // Start image download
             [[self class] addImageView:self forUrlString:_urlString withAttributes:[mutableAttributes.copy autorelease]];
         }
     }

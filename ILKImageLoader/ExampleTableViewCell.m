@@ -25,14 +25,21 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        _ilkImageView = [[[ILKImageView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.width)] autorelease];
+        _ilkImageView = [[[ILKImageView alloc] init] autorelease];
+        _ilkImageView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_ilkImageView];
-        _mainLabel = [[[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 30)] autorelease];
+        _mainLabel = [[[UILabel alloc] init] autorelease];
+        _mainLabel.translatesAutoresizingMaskIntoConstraints = NO;
         _mainLabel.backgroundColor = [UIColor clearColor];
         _mainLabel.textColor = [UIColor grayColor];
         _mainLabel.adjustsFontSizeToFitWidth = YES;
         _mainLabel.textAlignment = NSTextAlignmentCenter;
         [self.contentView addSubview:_mainLabel];
+        NSDictionary *views = @{@"ilkImageView":_ilkImageView, @"mainLabel":_mainLabel};
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[ilkImageView]|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[ilkImageView]|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[mainLabel]|" options:0 metrics:nil views:views]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[mainLabel(==height)]" options:0 metrics:@{@"height":@(30.0f)} views:views]];
     }
     return self;
 }
